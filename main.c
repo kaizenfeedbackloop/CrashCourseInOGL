@@ -31,12 +31,12 @@ void init()
 	glBindVertexArray(VAOs[Triangles]);
 
 	GLfloat vertices[NumVertices][2] = {
-		{ -0.90f, -0.90f }, // Triangle 1
-		{ 0.85f, -0.90f },
-		{ -0.90f, 0.85f },
-		{ 0.90f, -0.85f }, // Triangle 2
-		{ 0.90f, 0.90f },
-		{ -0.85, 0.90 }
+		{ -0.85f, -0.90f }, // Triangle 1
+		{ 0.90f, -0.90f },
+		{ 0.90f, 0.85f },
+		{ -0.90f, -0.85f }, // Triangle 2
+		{ 0.85f, 0.90f },
+		{ -0.90, 0.90 }
 	};
 
 	glGenBuffers(NumBuffers, Buffers);
