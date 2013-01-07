@@ -13,7 +13,7 @@ endif(GLEW_FOUND)
 
 #include_directories("${GLEW_INCLUDE_PATH}")
 
-add_executable(HelloOpenGL main.c)
+add_executable(HelloOpenGL main.c LoadShaders.h)
 
 #target_link_libraries(HelloOpenGL "${GLEW_LIBRARY}")
 
