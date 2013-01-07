@@ -1,5 +1,22 @@
 cmake_minimum_required(VERSION 2.8)
+project(HelloOpenGL C)
 
-project(HelloOpenGL)
+set(CMAKE_MODULE_PATH
+	${CMAKE_MODULE_PATH}
+	"${CMAKE_SOURCE_DIR}/cmake/Modules/"
+)
 
-add_executable(helloOGL main.cpp)
+find_package(GLEW REQUIRED)
+if(GLEW_FOUND)
+  message(STATUS "Found GLEW at ${GLEW_INCLUDE_PATH} and ${GLEW_LIBRARY}")
+endif(GLEW_FOUND)
+
+#include_directories("${GLEW_INCLUDE_PATH}")
+
+add_executable(HelloOpenGL main.c)
+
+#target_link_libraries(HelloOpenGL "${GLEW_LIBRARY}")
+
+set(CMAKE_EXE_LINKER_FLAGS
+	"-framework OpenGL -framework GLUT -framework Cocoa"
+)
