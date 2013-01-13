@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(HelloOpenGL C)
+project(CrashCourseInOGL C)
 
 set(CMAKE_MODULE_PATH
 	${CMAKE_MODULE_PATH}
@@ -9,14 +9,13 @@ set(CMAKE_MODULE_PATH
 find_package(GLEW REQUIRED)
 if(GLEW_FOUND)
   message(STATUS "Found GLEW at ${GLEW_INCLUDE_PATH} and ${GLEW_LIBRARY}")
+else(GLEW_FOUND)
+set(GLEW_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/../glew/include/")
+set(GLEW_LIBRARY "${CMAKE_SOURCE_DIR}/../glew/lib/glew32.lib")
+  message(STATUS "Set GLEW at ${GLEW_INCLUDE_PATH} and ${GLEW_LIBRARY}")
 endif(GLEW_FOUND)
 
-#include_directories("${GLEW_INCLUDE_PATH}")
+set(GLUT_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/../freeglut/include/")
+set(GLUT_LIBRARY "${CMAKE_SOURCE_DIR}/../freeglut/lib/x86/freeglut.lib")
 
-add_executable(HelloOpenGL main.c LoadShaders.h)
-
-#target_link_libraries(HelloOpenGL "${GLEW_LIBRARY}")
-
-set(CMAKE_EXE_LINKER_FLAGS
-	"-framework OpenGL -framework GLUT -framework Cocoa"
-)
+add_subdirectory(Week1)

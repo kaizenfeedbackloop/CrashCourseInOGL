@@ -1,16 +1,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-//#define GLEW
+#ifndef __APPLE__
+#define GLEW
+#endif
+
 #ifdef GLEW
 #include <GL/glew.h>
-#include <OpenGL/gl.h>
 #else
 #include <OpenGL/gl3.h>
 #endif
+
+#ifndef __APPLE__
+#include <GL/glu.h>
+#include <GL/glut.h>
+#else
 #include <OpenGL/glu.h>
 #include <OpenGL/glext.h>
 #include <GLUT/glut.h>
+#endif
 
 #include "LoadShaders.h"
 
@@ -36,7 +44,7 @@ void init()
 		{ -0.90f, 0.85f },
 		{ 0.90f, -0.85f }, // Triangle 2
 		{ 0.90f, 0.90f },
-		{ -0.85, 0.90 }
+		{ -0.85f, 0.90f }
 	};
 
 	glGenBuffers(NumBuffers, Buffers);
@@ -78,8 +86,11 @@ int main(int argc, char** argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(512,512);
+
+#ifndef __APPLE__
 	//glutInitContextVersion(3, 2);
 	//glutInitContextProfile(GLUT_CORE_PROFILE);
+#endif
 	glutCreateWindow("HelloOpenGL");
 
 #ifdef GLEW
