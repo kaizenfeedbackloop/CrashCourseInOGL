@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(CrashCourseInOGL C)
+project(CrashCourseInOGL CXX)
 
 set(CMAKE_MODULE_PATH
 	${CMAKE_MODULE_PATH}
@@ -19,3 +19,4 @@ set(GLUT_INCLUDE_PATH "${CMAKE_SOURCE_DIR}/../freeglut/include/")
 set(GLUT_LIBRARY "${CMAKE_SOURCE_DIR}/../freeglut/lib/x86/freeglut.lib")
 
 add_subdirectory(Week1)
+add_subdirectory(Week2)
