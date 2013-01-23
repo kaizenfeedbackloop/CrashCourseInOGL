@@ -1,0 +1,42 @@
+Auxiliary 1. Linear Algebra Primer
+Assignment:
+a. Read Chapters 1, 2, 3, & 5.1-5.3 in Essential Mathematics for Games and Interactive Applications (http://techbus.safaribooksonline.com/book/programming/game-programming/9781558608634).  Refresh at least matrix multiplication.
+
+b. Create a world-view-projection matrix using the following transforms (feel free to do so by hand, custom matrices, or using OpenGL utilities):
+
+i. S(s) where s = 4
+sx 0  0  0
+0 sy  0  0
+0  0  sz 0
+0  0  0  1
+
+ii. Rz(θ) where θ = π/4
+cosθ -sinθ 0 0
+sinθ cosθ 0 0
+0 0 1 0
+0 0 0 1
+
+iii. T(t) where t = (0, 0, -8)
+1  0  0  tx
+0  1  0  ty
+0  0  1  tz
+0  0  0  1
+
+iv. Pp(d) where d = 4
+1  0  0   0
+0  1  0   0
+0  0  1   0
+0  0 -1/d 0
+
+c. Project the following vertices using world-view-project matrix.
+v1 = (0.5, 0.5, 0.5)
+v2 = (0.5, 0.5, -0.5)
+v3 = (0.5, -0.5, 0.5)
+v4 = (0.5, -0.5, -0.5)
+v5 = (-0.5, 0.5, 0.5)
+v6 = (-0.5, 0.5, -0.5)
+v7 = (-0.5, -0.5, 0.5)
+v8 = (-0.5, -0.5, -0.5)
+
+d. Graph the projected vertices.  Fill free to “fill” in between the lines.
+	
