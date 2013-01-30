@@ -6,6 +6,8 @@ include_directories("${GLEW_INCLUDE_PATH}")
 include_directories("${GLUT_INCLUDE_PATH}")
 endif(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
+include_directories("${PROJECT_SOURCE_DIR}/../include")
+
 add_executable(Week3 main.cpp LoadShaders.h)
 
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

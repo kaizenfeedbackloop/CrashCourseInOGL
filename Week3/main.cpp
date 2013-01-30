@@ -20,13 +20,18 @@
 #include <GLUT/glut.h>
 #endif
 
+#include <math/vector.hpp>
+#include <math/matrix.hpp>
+#include <cmath>
+
+const float pi = acos(-1.0f);
+
 #include "LoadShaders.h"
 
 #define BUFFER_OFFSET(offset)  ((void *)(offset))
 
 enum VAO_IDs { Triangles, NumVAOs };
-enum Buffer_IDs { ArrayBuffer, NumBuffers };
-enum Attrib_IDs { vPosition = 0 };
+enum Buffer_IDs { ArrayBuffer, ColorBuffer, TransformBuffer, NumBuffers };
 
 GLuint VAOs[NumVAOs];
 GLuint Buffers[NumBuffers];
@@ -38,38 +43,70 @@ void init()
 	glGenVertexArrays(NumVAOs, VAOs);
 	glBindVertexArray(VAOs[Triangles]);
 
-	GLfloat vertices[NumVertices][2] = {
-		{ 0.0f, 1.0f }, // Triangle 1
-		{ 0.0f, 0.0f },
-		{ 1.0f, 0.0f }
-	};
-
 	glGenBuffers(NumBuffers, Buffers);
+
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
+	GLfloat vertices[NumVertices][4] = {
+		{ 0.0f, 1.0f, 0.0f, 1.0f },
+		{ 0.0f, 0.0f, 0.0f, 1.0f },
+		{ 1.0f, 0.0f, 0.0f, 1.0f }
+	};
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices,
 		GL_STATIC_DRAW);
 
+	glBindBuffer(GL_ARRAY_BUFFER, Buffers[ColorBuffer]);
+	GLfloat colors[2][4] = {
+		{ 1.0f, 0.0f, 0.0f, 1.0f },
+		{ 0.0f, 1.0f, 0.0f, 1.0f }
+	};
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors,
+		GL_STATIC_DRAW);
+
+
+	/* 	float theta = pi / 4.0f; 
+		mat4<float> rotate(cos(theta), -sin(theta), 0.0f, 0.0f,
+			sin(theta), cos(theta), 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 1.0f);
+*/
+	glBindBuffer(GL_ARRAY_BUFFER, Buffers[TransformBuffer]);
+	GLfloat translate[4*2][4] = {
+ 		{ 2.0f, 0.0f, 0.0f, 0.0f },
+		{ 0.0f, 2.0f, 0.0f, 0.0f },
+		{ 0.0f, 0.0f, 2.0f, 0.0f },
+		{ -1.0f, -1.0f, 0.0f, 1.0f },
+ 		{ 2.0f * cos(pi), 0.0f, 0.0f, 0.0f },
+		{ 0.0f, 2.0f * cos(pi), 0.0f, 0.0f },
+		{ 0.0f, 0.0f, 2.0f, 0.0f },
+		{ 1.0f, 1.0f, 0.0f, 1.0f }
+ 	};
+	glBufferData(GL_ARRAY_BUFFER, sizeof(translate), translate,
+		GL_STATIC_DRAW);
+
 	GLchar const * vertexSource =
-		"#version 120\r\n\
+		"#version 410 core\r\n\
 \r\n\
+layout (location = 0) in vec4 position;\r\n\
+\r\n\
+layout (location = 1) in vec4 color;\r\n\
+layout (location = 2) in mat4 transform;\r\n\
+\r\n\
+out vec4 diffuse;\r\n\
 void main()\r\n\
 {\r\n\
-    gl_Position = vPosition;\r\n\
+    gl_Position = transform * position;\r\n\
+    diffuse = color;\r\n\
 }\r\n\
 ";
 
 	GLchar const * fragmentSource =
-		"#if __VERSION__ >= 140\r\n\
+		"#version 410 core\r\n\
+in vec4 diffuse;\r\n\
 out vec4 fColor;\r\n\
-#endif\r\n\
 \r\n\
 void main()\r\n\
 {\r\n\
-#if __VERSION__ >= 140\r\n\
-    fColor = vec4(0.0, 0.0, 0.0, 1.0);\r\n\
-#else\r\n\
-    gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);\r\n\
-#endif\r\n\
+    fColor = diffuse;\r\n\
 }\r\n\
 ";
 
@@ -80,12 +117,31 @@ void main()\r\n\
 	};
 
 	GLuint program = LoadShadersFromString(shaders);
+
 	glUseProgram(program);
 
-	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0,
+	glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
+	GLint positionLocation = glGetAttribLocation(program, "position");
+	glVertexAttribPointer(positionLocation, 4, GL_FLOAT, GL_FALSE, 0,
 		BUFFER_OFFSET(0));
+	glEnableVertexAttribArray(positionLocation);
 
-	glEnableVertexAttribArray(vPosition);
+	glBindBuffer(GL_ARRAY_BUFFER, Buffers[ColorBuffer]);
+	GLint colorLocation = glGetAttribLocation(program, "color");
+	glVertexAttribPointer(colorLocation, 4, GL_FLOAT, GL_FALSE, 0,
+		BUFFER_OFFSET(0));
+	glEnableVertexAttribArray(colorLocation);
+	glVertexAttribDivisor(colorLocation, 1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, Buffers[TransformBuffer]);
+	GLint transformLocation = glGetAttribLocation(program, "transform");
+	for(size_t i = 0; i < 4; i++) {
+		glVertexAttribPointer(transformLocation + i, 4, GL_FLOAT, GL_FALSE,
+			sizeof(GLfloat[4][4]), BUFFER_OFFSET(sizeof(GLfloat[4]) * i));
+		glEnableVertexAttribArray(transformLocation + i);
+		glVertexAttribDivisor(transformLocation + i, 1);
+	}
+
 }
 
 void display()
@@ -93,13 +149,9 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glBindVertexArray(VAOs[Triangles]);
-	glDrawArrays(GL_TRIANGLES, 0, NumVertices);
+	glDrawArraysInstanced(GL_TRIANGLES, 0, NumVertices, 2);
 
 	glFlush();
-}
-
-void test()
-{
 }
 
 int main(int argc, char** argv)
