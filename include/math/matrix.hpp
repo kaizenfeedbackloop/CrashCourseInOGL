@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ostream>
+#include <cmath>
 
 #include "vector.hpp"
 
@@ -184,6 +185,34 @@ public:
 			" {"<<vec(2,0)<<","<<vec(2,1)<<","<<vec(2,2)<<","<<vec(2,3)<<"}"<<
 			std::endl <<
 			" {"<<vec(3,0)<<","<<vec(3,1)<<","<<vec(3,2)<<","<<vec(3,3)<<"}}";
+	}
+
+	static mat4<T> Translate(vec4<T> const & translate)
+	{
+		return mat4<T>(
+					   1, 0, 0, translate.X(),
+					   0, 1, 0, translate.Y(),
+					   0, 0, 1, translate.Z(),
+					   0, 0, 0, 1);
+					   
+	}
+
+	static mat4<T> RotateZ(float const theta)
+	{
+		return mat4<T>(
+					   cos(theta), -sin(theta), 0.0f, 0.0f,
+					   sin(theta), cos(theta), 0.0f, 0.0f,
+					   0.0f, 0.0f, 1.0f, 0.0f,
+					   0.0f, 0.0f, 0.0f, 1.0f);
+	}
+
+	static mat4<T> UniformScale(float const scale)
+	{
+		return mat4<T>(
+					   scale, 0.0f, 0.0f, 0.0f,
+					   0.0f, scale, 0.0f, 0.0f,
+					   0.0f, 0.0f, scale, 0.0f,
+					   0.0f, 0.0f, 0.0f, 1.0f);
 	}
 };
 

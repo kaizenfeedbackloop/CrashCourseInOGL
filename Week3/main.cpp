@@ -63,23 +63,15 @@ void init()
 		GL_STATIC_DRAW);
 
 
-	/* 	float theta = pi / 4.0f; 
-		mat4<float> rotate(cos(theta), -sin(theta), 0.0f, 0.0f,
-			sin(theta), cos(theta), 0.0f, 0.0f,
-			0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 0.0f, 1.0f);
-*/
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[TransformBuffer]);
-	GLfloat translate[4*2][4] = {
- 		{ 2.0f, 0.0f, 0.0f, 0.0f },
-		{ 0.0f, 2.0f, 0.0f, 0.0f },
-		{ 0.0f, 0.0f, 2.0f, 0.0f },
-		{ -1.0f, -1.0f, 0.0f, 1.0f },
- 		{ 2.0f * cos(pi), 0.0f, 0.0f, 0.0f },
-		{ 0.0f, 2.0f * cos(pi), 0.0f, 0.0f },
-		{ 0.0f, 0.0f, 2.0f, 0.0f },
-		{ 1.0f, 1.0f, 0.0f, 1.0f }
- 	};
+	mat4<GLfloat> translate[2] = {
+		mat4<GLfloat>::Translate(vec4<GLfloat>(-1.0f, -1.0f, 0.0f, 0.0f)) *
+		mat4<GLfloat>::UniformScale(2),
+
+		mat4<GLfloat>::Translate(vec4<GLfloat>(1.0f, 1.0f, 0.0f, 0.0f)) *
+		mat4<GLfloat>::RotateZ(pi) *
+		mat4<GLfloat>::UniformScale(2)
+	};
 	glBufferData(GL_ARRAY_BUFFER, sizeof(translate), translate,
 		GL_STATIC_DRAW);
 
