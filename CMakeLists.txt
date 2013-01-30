@@ -20,3 +20,4 @@ set(GLUT_LIBRARY "${CMAKE_SOURCE_DIR}/../freeglut/lib/x86/freeglut.lib")
 
 add_subdirectory(Week1)
 add_subdirectory(Week2)
+add_subdirectory(Week3)
