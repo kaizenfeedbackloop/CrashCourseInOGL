@@ -65,12 +65,12 @@ void init()
 
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[TransformBuffer]);
 	mat4<GLfloat> translate[2] = {
-		mat4<GLfloat>::Translate(vec4<GLfloat>(-1.0f, -1.0f, 0.0f, 0.0f)) *
-		mat4<GLfloat>::UniformScale(2),
+		mat4<GLfloat>::Translate(vec4<GLfloat>(-0.9f, -0.9f, 0.0f, 0.0f)) *
+		mat4<GLfloat>::UniformScale(1.75f),
 
-		mat4<GLfloat>::Translate(vec4<GLfloat>(1.0f, 1.0f, 0.0f, 0.0f)) *
+		mat4<GLfloat>::Translate(vec4<GLfloat>(0.9f, 0.9f, 0.0f, 0.0f)) *
 		mat4<GLfloat>::RotateZ(pi) *
-		mat4<GLfloat>::UniformScale(2)
+		mat4<GLfloat>::UniformScale(1.75f)
 	};
 	glBufferData(GL_ARRAY_BUFFER, sizeof(translate), translate,
 		GL_STATIC_DRAW);
