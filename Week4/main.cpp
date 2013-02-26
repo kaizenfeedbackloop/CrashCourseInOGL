@@ -57,23 +57,27 @@ void checkForError()
 
 void initRenderBuffers()
 {
+	/* generate ids... */
 	glGenRenderbuffers(NumRenderBuffers, renderBuffer);
 
+	/* create color buffer */
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer[Color]);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA, 256, 256);
 
+	/* create depth buffer */
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer[Depth]);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 256, 256);
 
+	/* generate frame buffer id */
 	glGenFramebuffers(1, &frameBuffer);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer);
 
+	/* create offscreen frame buffer with previously created color and depth
+	   buffers... */ 
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer);
 	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
 							  GL_RENDERBUFFER, renderBuffer[Color]);
 	glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
 							  GL_RENDERBUFFER, renderBuffer[Depth]);
-
-	glEnable(GL_DEPTH_TEST);
 }
 
 void initYuvTransforms()
@@ -92,16 +96,16 @@ void initYuvTransforms()
 
 	/* All... */
 	glBindBuffer(GL_UNIFORM_BUFFER, YuvBuffers[AllComponents]);
-	checkForError();
+	/* Just use identity matrix... */
 	mat4<GLfloat> all(mat4<GLfloat>::Identity);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(mat4<GLfloat>), &all,
 		GL_STATIC_DRAW);
-	checkForError();
 
 	/* Y... */
 	glBindBuffer(GL_UNIFORM_BUFFER, YuvBuffers[YComponent]);
 	mat4<GLfloat> y =
 		yuvToRgb *
+		/* isolates the Y... */
 		mat4<GLfloat>(1.0f, 0.0f, 0.0f, 0.0f,
 					 0.0f, 0.0f, 0.0f, 0.0f,
 					 0.0f, 0.0f, 0.0f, 0.0f,
@@ -114,6 +118,7 @@ void initYuvTransforms()
 	glBindBuffer(GL_UNIFORM_BUFFER, YuvBuffers[UComponent]);
 	mat4<GLfloat> u =
 		yuvToRgb *
+		/* isolates the U... */
 		mat4<GLfloat>(0.0f, 0.0f, 0.0f, 0.0f,
 					0.0f, 1.0f, 0.0f, 0.0f,
 					0.0f, 0.0f, 0.0f, 0.0f,
@@ -126,6 +131,7 @@ void initYuvTransforms()
 	glBindBuffer(GL_UNIFORM_BUFFER, YuvBuffers[VComponent]);
 	mat4<GLfloat> v =
 		yuvToRgb *
+		/* isolates the V... */
 		mat4<GLfloat>(0.0f, 0.0f, 0.0f, 0.0f,
 					0.0f, 0.0f, 0.0f, 0.0f,
 					0.0f, 0.0f, 1.0f, 0.0f,
@@ -137,16 +143,22 @@ void initYuvTransforms()
 
 void init()
 {
+	/* enable depth test for program */
+	glEnable(GL_DEPTH_TEST);
+
+	/* setup offscreen rendering */
 	initRenderBuffers();
 
+	/* Create YUV color filter/transforms */
 	initYuvTransforms();
-	
+
+	/* Create an id for the vertex array */
 	glGenVertexArrays(NumVAOs, VAOs);
 	glBindVertexArray(VAOs[Triangles]);
 
+	/* Create a buffer to hold vertex information*/
 	glGenBuffers(NumBuffers, Buffers);
 	glBindBuffer(GL_ARRAY_BUFFER, Buffers[ArrayBuffer]);
-
 
 	struct VertexData {
 		vec4<GLfloat> position;
@@ -225,9 +237,7 @@ void main()\r\n\
 	glEnableVertexAttribArray(colorLocation);
 
 	GLint filterUBI = glGetUniformBlockIndex(program, "ColorConversion");
-	checkForError();
 	glUniformBlockBinding(program, filterUBI, filterUBB);
-	checkForError();
 }
 
 void drawToOffScreenFrameBuffer()
@@ -257,7 +267,6 @@ void display()
 
 	glBindBufferRange(GL_UNIFORM_BUFFER, filterUBB, YuvBuffers[AllComponents],
 					  0, sizeof(mat4<GLfloat>));
-	checkForError();
 	drawToOffScreenFrameBuffer();
 	glBlitFramebuffer(0,0,255,255,0,256,255,511,
 		GL_COLOR_BUFFER_BIT, GL_NEAREST);
