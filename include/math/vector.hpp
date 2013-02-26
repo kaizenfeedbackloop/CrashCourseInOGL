@@ -84,7 +84,7 @@ public:
 
 	vec4(vec4 const & rhs)
 	{
-		ctor(rhs.X(), rhs.Y(), rhs.Z());
+		ctor(rhs.X(), rhs.Y(), rhs.Z(), rhs.W());
 	}
 
 	vec4& operator=(vec4 const & rhs)
@@ -102,5 +102,69 @@ public:
 	{
 		return stream << "{ " << vec.X() << ", " << vec.Y() << ", " <<
 			vec.Z() << " }";
+	}
+};
+
+template <class T>
+class vec2
+{
+private:
+	static const size_t _x = 0;
+	static const size_t _y = 1;
+
+	T _values[2];
+
+	void ctor(T const & x, T const & y)
+	{
+		_values[_x] = x;
+		_values[_y] = y;
+	}
+
+public:
+	T const & X() const
+	{
+		return _values[_x];
+	}
+
+	void X(T const & x)
+	{
+		_values[_x] = x;
+	}
+	
+	T const & Y() const
+	{
+		return _values[_y];
+	}
+
+	void Y(T const & y)
+	{
+		_values[_y] = y;
+	}
+
+	vec2()
+	{
+		ctor(0, 0);
+	}
+
+	vec2(T const & x, T const & y)
+	{
+		ctor(x, y);
+	}
+
+
+	vec2(vec2 const & rhs)
+	{
+		ctor(rhs.X(), rhs.Y());
+	}
+
+	vec2& operator=(vec2 const & rhs)
+	{
+		ctor(rhs.X(), rhs.Y());
+		return *this;
+	}
+
+	friend std::ostream& operator<< (std::ostream& stream, vec2 const & vec)
+	{
+		return stream << "{ " << vec.X() << ", " << vec.Y() << " }";
 	}
 };

@@ -6,6 +6,12 @@ set(CMAKE_MODULE_PATH
 	"${CMAKE_SOURCE_DIR}/cmake/Modules/"
 )
 
+find_package(PNG REQUIRED)
+message(STATUS "Set PNG at ${PNG_INCLUDE_PATH} and ${PNG_LIBRARY}")
+
+find_package(ZLIB REQUIRED)
+message(STATUS "Set ZLIB at ${ZLIB_INCLUDE_PATH} and ${ZLIB_LIBRARY}")
+
 find_package(GLEW REQUIRED)
 if(GLEW_FOUND)
   message(STATUS "Found GLEW at ${GLEW_INCLUDE_PATH} and ${GLEW_LIBRARY}")
@@ -22,3 +28,4 @@ add_subdirectory(Week1)
 add_subdirectory(Week2)
 add_subdirectory(Week3)
 add_subdirectory(Week4)
+add_subdirectory(Week5)
