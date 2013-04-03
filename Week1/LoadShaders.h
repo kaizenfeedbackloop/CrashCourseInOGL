@@ -58,6 +58,8 @@ GLuint CreateShader(ShaderInfo const * shaderInfo)
 	glShaderSource(shader, 1, (const GLchar**)(&shaderString), 0);
 	glCompileShader(shader);
 
+	free(shaderString);
+
 	GLint isCompiled = 0;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
 	if(isCompiled == 0) {
