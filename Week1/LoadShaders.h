@@ -54,13 +54,10 @@ void PrintShaderErrorLog(GLuint shader)
 GLuint CreateShader(ShaderInfo const * shaderInfo)
 {
 	GLchar *shaderString = file2string(shaderInfo->Source);
-<<<<<<< HEAD
-=======
 	if(shaderString == 0) {
 		return 0;
 	}
 
->>>>>>> LoadShaderFix
 	GLuint shader = glCreateShader(shaderInfo->Type);
 	glShaderSource(shader, 1, (const GLchar**)(&shaderString), 0);
 	glCompileShader(shader);
