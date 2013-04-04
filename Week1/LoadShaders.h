@@ -8,9 +8,9 @@ typedef struct _ShaderInfo {
 
 char * file2string(char const * fname)
 {
-	FILE *file;
-	long flen, rlen;
-	char *str;
+	FILE *file = 0;
+	long flen = 0, rlen = 0;
+	char *str = 0;
 
 	file = fopen(fname, "r");
 	if (file == NULL) {
@@ -54,6 +54,10 @@ void PrintShaderErrorLog(GLuint shader)
 GLuint CreateShader(ShaderInfo const * shaderInfo)
 {
 	GLchar *shaderString = file2string(shaderInfo->Source);
+	if(shaderString == 0) {
+		return 0;
+	}
+
 	GLuint shader = glCreateShader(shaderInfo->Type);
 	glShaderSource(shader, 1, (const GLchar**)(&shaderString), 0);
 	glCompileShader(shader);
