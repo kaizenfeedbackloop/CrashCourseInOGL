@@ -6,6 +6,37 @@ typedef struct _ShaderInfo {
 	GLchar const * Source;
 } ShaderInfo;
 
+char * file2string(char const * fname)
+{
+	FILE *file;
+	long flen, rlen;
+	char *str;
+
+	file = fopen(fname, "r");
+	if (file == NULL) {
+		fprintf(stderr, "Can't open file '%s' for reading\n", fname);
+		goto done;
+	}
+
+	fseek(file, 0, SEEK_END);
+	flen = ftell(file);
+	rewind(file);
+
+	str = (char *)malloc(sizeof(*str) * flen + 1);
+	if (str == NULL) {
+		fprintf(stderr, "Can't malloc space for '%s'\n", fname);
+		goto done;
+	}
+
+	rlen = fread(str, sizeof(*str), flen, file);
+	str[rlen] = '\0';
+
+done:
+	if(file != NULL)
+		fclose(file);
+	return str;
+}
+
 void PrintShaderErrorLog(GLuint shader)
 {
 	GLint maxLength = 0;
@@ -22,9 +53,12 @@ void PrintShaderErrorLog(GLuint shader)
 
 GLuint CreateShader(ShaderInfo const * shaderInfo)
 {
+	GLchar *shaderString = file2string(shaderInfo->Source);
 	GLuint shader = glCreateShader(shaderInfo->Type);
-	glShaderSource(shader, 1, (const GLchar**)(&shaderInfo->Source), 0);
+	glShaderSource(shader, 1, (const GLchar**)(&shaderString), 0);
 	glCompileShader(shader);
+
+	free(shaderString);
 
 	GLint isCompiled = 0;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
@@ -38,39 +72,13 @@ GLuint CreateShader(ShaderInfo const * shaderInfo)
 
 GLuint LoadShaders(ShaderInfo const * shaderInfo)
 {
-	GLchar const * vertexSource =
-		"#if __VERSION__ >= 140\r\n\
-in vec4  vPosition;\r\n\
-#else\r\n\
-attribute vec4 vPosition;\r\n\
-#endif\r\n\
-\r\n\
-void main()\r\n\
-{\r\n\
-    gl_Position = vPosition;\r\n\
-}\r\n\
-";
-	ShaderInfo vertexShaderInfo = { GL_VERTEX_SHADER, vertexSource };
+	ShaderInfo vertexShaderInfo = { GL_VERTEX_SHADER, "shader.vert" };
 	GLuint vertexShader = CreateShader(&vertexShaderInfo);
 	if(vertexShader == 0) {
 		return 0;
 	}
 
-	GLchar const * fragmentSource =
-		"#if __VERSION__ >= 140\r\n\
-out vec4 fColor;\r\n\
-#endif\r\n\
-\r\n\
-void main()\r\n\
-{\r\n\
-#if __VERSION__ >= 140\r\n\
-    fColor = vec4(0.0, 0.0, 0.0, 1.0);\r\n\
-#else\r\n\
-    gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);\r\n\
-#endif\r\n\
-}\r\n\
-";
-	ShaderInfo fragmentShaderInfo = { GL_FRAGMENT_SHADER, fragmentSource };
+	ShaderInfo fragmentShaderInfo = { GL_FRAGMENT_SHADER, "shader.frag" };
 	GLuint fragmentShader = CreateShader(&fragmentShaderInfo);
 	if(fragmentShader == 0) {
 		return 0;
