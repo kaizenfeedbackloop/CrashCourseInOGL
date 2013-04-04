@@ -6,6 +6,7 @@
 
 typedef unsigned char byte;
 
+/* Provides information to find glyph bitmap within font map. */
 class Glyph
 {
 public:
@@ -27,6 +28,7 @@ public:
 	}
 
 	vec2<size_t> const topLeft() const { return _topLeft; }
+
 	vec2<size_t> const size() const { return _size; }
 
 private:
@@ -34,21 +36,35 @@ private:
 	vec2<size_t> _size;
 };
 
+/* Provides an interface to render glyphs to an image buffer and read glyphs
+   back from the image buffer. */
 class IFont
 {
 public:
 	virtual ~IFont() {}
 
+	/* Render glyphs */
 	virtual void preload(std::string const & characters) = 0;
+
+	/* Access image buffer */
 	virtual byte const * const buffer() const = 0;
+
+	/* Pitch of image buffer */
 	virtual const int pitch() const = 0;
+
+	/* Height of image buffer */
 	virtual const size_t height() const = 0;
+
+	/* Bits per pixel */
 	virtual const size_t bpp() const = 0;
+
+	/* Get glyph info */
 	virtual Glyph const getGlyph(char const character) = 0;
 };
 
 class FontFactoryImpl;
 
+/* Loads the font */
 class FontFactory
 {
 public:

@@ -1,8 +1,2 @@
-Chapter 4. Color, Pixels, and Framebuffers &
-Chapter 5. Viewing Transformations, Clipping, and Feedback
-	a) Read Chapters 4 & 5 from the OpenGL Programming Guide, 8th Edition
-	b) Write a simple vertex shader that takes in a color for each vertex.
-	c) Write a simple fragment shader.
-	d) Render a color triangle using three triangles similar to the following figure 1 (note that the middle is white).  Render this colored triangle to a frame buffer and copied to the top-left quadrant of the window.
-	e) Create three fragment shaders that will isolate the Y’, U, and V components of the rendered triangle (http://techbus.safaribooksonline.com/9780123919267/toc304).
-	f) Render the triangle three more times using each of the three new shaders and the frame buffer and copy them to the remaining quadrants (see Figure 2).
+Auxiliary 2. Displaying Text
+	  a) 

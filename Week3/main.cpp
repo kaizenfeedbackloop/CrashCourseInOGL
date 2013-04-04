@@ -81,7 +81,7 @@ void init()
 layout (location = 0) in vec4 position;\r\n\
 \r\n\
 layout (location = 1) in vec4 color;\r\n\
-layout (location = 2) in mat4 transform;\r\n\
+layout (location = 2) in uniform mat4 transform;\r\n\
 \r\n\
 out vec4 diffuse;\r\n\
 void main()\r\n\
