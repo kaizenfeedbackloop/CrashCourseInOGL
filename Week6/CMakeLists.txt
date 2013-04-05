@@ -16,8 +16,7 @@ add_executable(Week6 main.cpp LoadShaders.h Font.hpp Font.cpp)
 target_link_libraries(Week6 "${FREETYPE_LIBRARY}")
 
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-target_link_libraries(Week6 "${GLEW_LIBRARY}")
-target_link_libraries(Week6 "${GLUT_LIBRARY}")
+target_link_libraries(Week6 "${GLEW_LIBRARY}" ${GLUT_LIBRARY} ${GLU_LIBRARY} )
 endif(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

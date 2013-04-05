@@ -11,9 +11,11 @@
     ${PROJECT_SOURCE_DIR}/../freetype2/include
     DOC "The directory where freetype/freetype.h resides")
   FIND_LIBRARY( FREETYPE_LIBRARY
-    NAMES freetype2411_D freetype2411
+    NAMES freetype2411_D freetype2411 freetype
     PATHS
     ${PROJECT_SOURCE_DIR}/../freetype2/objs/win32/vc2010
+    /usr/local/lib
+
     DOC "The FREETYPE library")
 
 IF (FREETYPE_INCLUDE_PATH)

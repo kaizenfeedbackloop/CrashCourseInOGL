@@ -14,8 +14,7 @@ endif(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 add_executable(Week1 main.cpp LoadShaders.h)
 
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-target_link_libraries(Week1 "${GLEW_LIBRARY}")
-target_link_libraries(Week1 "${GLUT_LIBRARY}")
+target_link_libraries(Week1 "${GLEW_LIBRARY}" ${GLUT_LIBRARY})
 endif(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

@@ -11,8 +11,7 @@ include_directories("${PROJECT_SOURCE_DIR}/../include")
 add_executable(Week3 main.cpp LoadShaders.h)
 
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-target_link_libraries(Week3 "${GLEW_LIBRARY}")
-target_link_libraries(Week3 "${GLUT_LIBRARY}")
+target_link_libraries(Week3 "${GLEW_LIBRARY}" ${GLUT_LIBRARY})
 endif(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
