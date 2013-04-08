@@ -72,22 +72,23 @@ GLuint CreateShader(ShaderInfo const * shaderInfo)
 
 GLuint LoadShaders(ShaderInfo const * shaderInfo)
 {
-	ShaderInfo vertexShaderInfo = { GL_VERTEX_SHADER, "shader.vert" };
-	GLuint vertexShader = CreateShader(&vertexShaderInfo);
-	if(vertexShader == 0) {
+	ShaderInfo const * shaderList = shaderInfo;
+	if(shaderList == NULL)
 		return 0;
-	}
 
-	ShaderInfo fragmentShaderInfo = { GL_FRAGMENT_SHADER, "shader.frag" };
-	GLuint fragmentShader = CreateShader(&fragmentShaderInfo);
-	if(fragmentShader == 0) {
-		return 0;
-	}
-
+	/* create program
+	 * -create shader, attach shader
+	 * -repeat until there are no more shaders
+	 * link program
+	 */
 	GLuint shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
 
-	glAttachShader(shaderProgram, fragmentShader);
+	for(int i = 0; shaderList[i].Source != NULL ; i++) {
+		int shader = CreateShader(&shaderList[i]);
+
+		if(shader != 0)
+			glAttachShader(shaderProgram, shader);
+	}
 
 	glLinkProgram(shaderProgram);
 
