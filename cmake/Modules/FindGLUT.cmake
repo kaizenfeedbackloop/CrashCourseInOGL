@@ -107,7 +107,7 @@ IF(NOT GLUT_INCLUDE_DIR)
       ${PROJECT_SOURCE_DIR}/../freeglut/include
       DOC "The directory where freetype/freetype.h resides")
     FIND_LIBRARY( GLUT_glut_LIBRARY
-      NAMES glut GLUT glut32
+      NAMES glut GLUT glut32 freeglut
       PATHS ${PROJECT_SOURCE_DIR}/../freeglut/lib/x86
       DOC "The GLUT Library")
   ENDIF()

@@ -6,7 +6,7 @@ configure_file(	${CMAKE_CURRENT_SOURCE_DIR}/Barn.png
 
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 include_directories("${GLEW_INCLUDE_PATH}")
-include_directories("${GLUT_INCLUDE_PATH}")
+include_directories("${GLUT_INCLUDE_DIR}")
 endif(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 include_directories(

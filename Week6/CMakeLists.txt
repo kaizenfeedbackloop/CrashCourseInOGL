@@ -3,7 +3,7 @@ project(Week6 CXX)
 
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 include_directories("${GLEW_INCLUDE_PATH}")
-include_directories("${GLUT_INCLUDE_PATH}")
+include_directories("${GLUT_INCLUDE_DIR}")
 endif(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 include_directories(
